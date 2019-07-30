@@ -46,7 +46,12 @@
 
     // Coloca a bola no meio
     function resetaBola(){
-        incrementoX = -incrementoX;
+        if(incrementoX>0){
+            incrementoX = -3
+        }
+        else{
+            incrementoX = 3;
+        }
         bolaX = canvas.height/2;
         bolaY = canvas.width/2;
     }
@@ -63,8 +68,8 @@
     // Função com os movimentos da bola e paddle
     function moveAll(){
         if(bolaX>canvas.width-ballRadius - PADDLE_WIDTH*2){ // Bola saiu para a direita
-            if(bolaY>paddleRightY && bolaY<paddleRightY+PADDLE_HEIGHT){
-                incrementoX = -incrementoX;
+            if(bolaY>paddleRightY && bolaY<paddleRightY+PADDLE_HEIGHT){ // Bola bateu na paddle
+                incrementoX = incrementoX*-1.1;
             }
             else{
                 resetaBola();
@@ -72,8 +77,8 @@
             }
         }
         else if(bolaX-ballRadius<PADDLE_WIDTH*2){ // Bola saiu para a esquerda
-            if(bolaY>paddleLeftY && bolaY<paddleLeftY+PADDLE_HEIGHT){
-                incrementoX = -incrementoX;
+            if(bolaY>paddleLeftY && bolaY<paddleLeftY+PADDLE_HEIGHT){ // Bola bateu na paddle
+                incrementoX = incrementoX*-1.1;
             }
             else{
                 resetaBola();
