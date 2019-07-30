@@ -1,0 +1,67 @@
+<DOCTYPE! html></DOCTYPE>
+<html>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+
+<script>
+    var canvas;
+    var canvasContext;
+    var ballRadius = 8;
+    var bolaX;
+    var bolaY;
+    var incrementoX = 3;
+    var incrementoY = 1;
+    var paddleHeight = 100;
+    var paddleWidth = 10;
+
+    window.onload = function (){
+        
+        //  Cria o canvas
+        canvas = document.getElementById('gameCanvas');
+        canvasContext = canvas.getContext('2d');        
+        
+        // Posiciiona a bola no meio
+        bolaX = (canvas.width/2)-ballRadius;
+        bolaY = bolaX;
+
+        // Define frames por segundo
+        var fps = 60;
+        // Intervalo no qual vai desenhar tudo
+        setInterval(function(){moveAll();desenhaTudo();},1000/fps);
+    }
+
+    // Função com os movimentos da bola e paddle
+    function moveAll(){
+        if(bolaX>canvas.width-ballRadius || bolaX-ballRadius<0){
+            incrementoX = -incrementoX;
+        }
+        if(bolaY>canvas.height-ballRadius || bolaY-ballRadius<0){
+            incrementoY = -incrementoY;
+        }
+        bolaX = bolaX + incrementoX;
+        bolaY = bolaY + incrementoY;
+    }
+
+    // Função que desenha tudo na tela menos o fundo
+    function desenhaTudo(){
+
+        // Fundo
+        canvasContext.fillStyle = 'black';
+        canvasContext.fillRect(0,0,canvas.width,canvas.height);
+        
+        // Bola
+        canvasContext.fillStyle = 'white';
+        canvasContext.beginPath();
+        canvasContext.arc(bolaX,bolaY,ballRadius,0,Math.PI*2,true);
+        canvasContext.fill();
+        
+        // Paddle Esquerdo
+        canvasContext.fillStyle = 'white';
+        canvasContext.fillRect(0+paddleWidth,(canvas.height/2)-(paddleHeight/2),paddleWidth,paddleHeight);
+
+        // Paddle Direito
+        canvasContext.fillStyle = 'white';
+        canvasContext.fillRect(canvas.width-(paddleWidth*2),(canvas.height/2)-(paddleHeight/2),paddleWidth,paddleHeight);
+    }
+</script>
+
+</html>
