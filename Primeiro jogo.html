@@ -10,8 +10,9 @@
     var bolaY;
     var incrementoX = 3;
     var incrementoY = 1;
-    var paddleHeight = 100;
-    var paddleWidth = 10;
+    const PADDLE_HEIGHT = 100;
+    const PADDLE_WIDTH = 10;
+    var paddleLeftY = 0;
 
     window.onload = function (){
         
@@ -23,12 +24,29 @@
         bolaX = (canvas.width/2)-ballRadius;
         bolaY = bolaX;
 
+        // Posiciona o Paddle no meio
+        paddleLeftY = (canvas.height/2)-(PADDLE_HEIGHT/2);
+
         // Define frames por segundo
         var fps = 60;
         // Intervalo no qual vai desenhar tudo
         setInterval(function(){moveAll();desenhaTudo();},1000/fps);
+
+        // Movimento do mouse
+        canvas.addEventListener('mousemove',
+                            function(evt){
+                                var mousePos = calculateMousePos(evt);
+                                paddleLeftY = mousePos.y;
+                            })
     }
 
+    function calculateMousePos(evt){
+        var rect = canvas.getBoundingClientRect();
+        var root = document.documentElement;
+        var mouseX = evt.clientX - rect.left - root.scrollLeft;
+        var mouseY = evt.clientY - rect.top - root.scrollTop;
+        return{x:mouseX,y:mouseY};
+    }
     // Função com os movimentos da bola e paddle
     function moveAll(){
         if(bolaX>canvas.width-ballRadius || bolaX-ballRadius<0){
@@ -55,12 +73,12 @@
         canvasContext.fill();
         
         // Paddle Esquerdo
-        canvasContext.fillStyle = 'green';
-        canvasContext.fillRect(0+paddleWidth,(canvas.height/2)-(paddleHeight/2),paddleWidth,paddleHeight);
+        canvasContext.fillStyle = 'white';
+        canvasContext.fillRect(0+PADDLE_WIDTH,paddleLeftY,PADDLE_WIDTH,PADDLE_HEIGHT);
 
         // Paddle Direito
-        canvasContext.fillStyle = 'green';
-        canvasContext.fillRect(canvas.width-(paddleWidth*2),(canvas.height/2)-(paddleHeight/2),paddleWidth,paddleHeight);
+        canvasContext.fillStyle = 'white';
+        canvasContext.fillRect(canvas.width-(PADDLE_WIDTH*2),(canvas.height/2)-(PADDLE_HEIGHT/2),PADDLE_WIDTH,PADDLE_HEIGHT);
     }
 </script>
 
