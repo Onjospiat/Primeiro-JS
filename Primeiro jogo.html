@@ -16,6 +16,7 @@
     var paddleRightY = 0;
     var playerLeftScore = 0;
     var playerRightScore = 0;
+	var velLimite = 5;
 
     window.onload = function (){
         
@@ -67,9 +68,10 @@
 
     // Função com os movimentos da bola e paddle
     function moveAll(){
+		console.log("Velocidade: ",incrementoX);
         if(bolaX>canvas.width-ballRadius - PADDLE_WIDTH*2){ // Bola saiu para a direita
             if(bolaY>paddleRightY && bolaY<paddleRightY+PADDLE_HEIGHT){ // Bola bateu na paddle
-                incrementoX = incrementoX*-1.1;
+                incrementoX = colisaoBolaPaddle(incrementoX,velLimite);
             }
             else{
                 resetaBola();
@@ -78,7 +80,8 @@
         }
         else if(bolaX-ballRadius<PADDLE_WIDTH*2){ // Bola saiu para a esquerda
             if(bolaY>paddleLeftY && bolaY<paddleLeftY+PADDLE_HEIGHT){ // Bola bateu na paddle
-                incrementoX = incrementoX*-1.1;
+                incrementoX = colisaoBolaPaddle(incrementoX,velLimite);
+				
             }
             else{
                 resetaBola();
@@ -91,6 +94,8 @@
         }
         bolaX = bolaX + incrementoX;
         bolaY = bolaY + incrementoY;
+		
+		paddleRightY = bolaY-ballRadius;
     }
 
     // Função que desenha tudo na tela menos o fundo
@@ -114,9 +119,16 @@
         canvasContext.fillStyle = 'white';
         canvasContext.fillRect(canvas.width-(PADDLE_WIDTH*2),paddleRightY,PADDLE_WIDTH,PADDLE_HEIGHT);
 
-        console.log("Player Left:",playerLeftScore);
-        console.log("Player Right:",playerRightScore);
+        //console.log("Player Left:",playerLeftScore);
+        //console.log("Player Right:",playerRightScore);
     }
+	
+	function colisaoBolaPaddle (veloAtual, veloLimite){
+		if(veloAtual<Math.abs(veloLimite)){
+					return veloAtual*-1.1;
+				}
+				else{return veloAtual*-1;}
+	}
 </script>
 
 </html>
