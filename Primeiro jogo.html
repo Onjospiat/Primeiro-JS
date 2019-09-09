@@ -19,11 +19,11 @@
 	var velLimite = 5;
 
     window.onload = function (){
-        
+
         //  Cria o canvas
         canvas = document.getElementById('gameCanvas');
-        canvasContext = canvas.getContext('2d');        
-        
+        canvasContext = canvas.getContext('2d');
+
         // Posiciiona a bola no meio
         bolaX = (canvas.width/2)-ballRadius;
         bolaY = bolaX;
@@ -68,7 +68,7 @@
 
     // Função com os movimentos da bola e paddle
     function moveAll(){
-		console.log("Velocidade: ",incrementoX);
+		//console.log("Velocidade: ",incrementoX);
         if(bolaX>canvas.width-ballRadius - PADDLE_WIDTH*2){ // Bola saiu para a direita
             if(bolaY>paddleRightY && bolaY<paddleRightY+PADDLE_HEIGHT){ // Bola bateu na paddle
                 incrementoX = colisaoBolaPaddle(incrementoX,velLimite);
@@ -81,21 +81,31 @@
         else if(bolaX-ballRadius<PADDLE_WIDTH*2){ // Bola saiu para a esquerda
             if(bolaY>paddleLeftY && bolaY<paddleLeftY+PADDLE_HEIGHT){ // Bola bateu na paddle
                 incrementoX = colisaoBolaPaddle(incrementoX,velLimite);
-				
+
             }
             else{
                 resetaBola();
                 playerRightScore = playerRightScore +1;
             }
-            
-        }
+
+        } //Bola batendo no topo e na base da tela
         if(bolaY>canvas.height-ballRadius || bolaY-ballRadius<0){
             incrementoY = -incrementoY;
         }
         bolaX = bolaX + incrementoX;
         bolaY = bolaY + incrementoY;
-		
-		paddleRightY = bolaY-ballRadius;
+
+		//paddleRightY = bolaY-ballRadius-(PADDLE_HEIGHT/2); // Movimenta o paddleRight para seguir a bola e nunca errar
+     paddleRightMiddle = bolaY-ballRadius-(PADDLE_HEIGHT/2);
+     if(incrementoX>0){
+      if(paddleRightY<paddleRightMiddle){
+        paddleRightY+=2;
+        console.log("Acima");
+      }
+      else{
+        paddleRightY-=2;
+      }
+    }
     }
 
     // Função que desenha tudo na tela menos o fundo
@@ -104,13 +114,13 @@
         // Fundo
         canvasContext.fillStyle = 'black';
         canvasContext.fillRect(0,0,canvas.width,canvas.height);
-        
+
         // Bola
         canvasContext.fillStyle = 'white';
         canvasContext.beginPath();
         canvasContext.arc(bolaX,bolaY,ballRadius,0,Math.PI*2,true);
         canvasContext.fill();
-        
+
         // Paddle Esquerdo
         canvasContext.fillStyle = 'white';
         canvasContext.fillRect(0+PADDLE_WIDTH,paddleLeftY,PADDLE_WIDTH,PADDLE_HEIGHT);
@@ -122,7 +132,7 @@
         //console.log("Player Left:",playerLeftScore);
         //console.log("Player Right:",playerRightScore);
     }
-	
+
 	function colisaoBolaPaddle (veloAtual, veloLimite){
 		if(veloAtual<Math.abs(veloLimite)){
 					return veloAtual*-1.1;
